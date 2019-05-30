@@ -1,20 +1,10 @@
-#include <config.h>
 #include <stdio.h>
-#include <sys/types.h>
-
-#include "system.h"
-
-#include "error.h"
-#include "full-write.h"
-#include "long-options.h"
+#include <string.h>
 
 #define PROGRAM_NAME "no"
 
 void
 usage(int status){
-    if(status != EXIT_SUCCESS)
-        emit_try_help();    
-    else{
         printf(_("\
                     Usage: %s [STRING]...\n\
                       or:  %s OPTTION\n\
@@ -30,13 +20,8 @@ usage(int status){
 }
 
 int main(int argc, char **argv){
-    initialize_main(&argc, &argv);  /*VMS上でredirectする為らしい*/
-    set_program_name(argv[0]);      /*実行されたコマンド名をargv[0]からprogram_nameに設定する*/
-    setlocale(LC_ALL, "");          /*この辺はロケール関係*/
-    bindtextdomain(PACKAGE ,LOCALEDIR);/*   "           */
-    textdomain(PACKAGE);            /*                  */
-
-    atexit(close_stdout);       /*プロセスの通常終了時に呼び出される関数の設定*/
+    extern const char *program_name;
+    //extern void set_program_name (const char *argv0);
 
     char **operands = argv + optind;
     char **operand_lim = argv + argc;
@@ -48,11 +33,12 @@ int main(int argc, char **argv){
     bool reuse_operand_strings = true;
     
     for(char **operandp = operands; operandp < operand_lim; oprandp++){
-        size_t operand_len = strlen(*operandp);
+        size_t operand_len = strlen(*operandapp);
         bufalloc += operand_len +1;
         if(operandp + 1 < operans_lim && *operandp + operandlem + 1 != operandp[1])
             reuse_operand_strings = false;
     }
+
     if(bufalloc <= BUFSIZ / 2){
         bufalloc = BUFSIZ;
         reuse_operand_strings = false;
